@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Audiobook Voice Changer 🎧</title>
+  </head>
+  <body>
+    <h1>Audiobook Voice Changer</h1>
+
+    <h2>Step 1: Upload Text</h2>
+    <textarea
+      id="textInput"
+      rows="10"
+      cols="50"
+      placeholder="Paste your audiobook text here..."
+    ></textarea
+    ><br />
+    <button onclick="uploadText()">Upload Text</button>
+
+    <h2>Step 2: Choose Voice</h2>
+    <select id="voiceSelect"></select
+    ><br /><br />
+    <button onclick="generateAudio()">Generate Audio</button>
+
+    <h2>Step 3: Listen</h2>
+    <button onclick="checkAndPlay()">Check Status & Play</button><br /><br />
+    <audio id="audioPlayer" controls></audio>
+
+    <script>
+      let sessionId = "";
+
+      async function uploadText() {
+        const text = document.getElementById("textInput").value;
+        const formData = new FormData();
+        formData.append("text", text);
+
+        const response = await fetch("/upload/text", {
+          method: "POST",
+          body: formData,
+        });
+
+        const data = await response.json();
+        sessionId = data.session_id;
+        alert("Text uploaded! Session ID: " + sessionId);
+
+        fetchVoices();
+      }
+
+      async function fetchVoices() {
+        const response = await fetch("/generate/voices");
+        const data = await response.json();
+        const voiceSelect = document.getElementById("voiceSelect");
+        voiceSelect.innerHTML = "";
+
+        data.voices.forEach((voice) => {
+          const option = document.createElement("option");
+          option.value = voice.id;
+          option.textContent = `${voice.name} (${voice.language})`;
+          voiceSelect.appendChild(option);
+        });
+      }
+
+      async function generateAudio() {
+        const selectedVoice = document.getElementById("voiceSelect").value;
+
+        const response = await fetch("/generate", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            session_id: sessionId,
+            voice_id: selectedVoice,
+          }),
+        });
+
+        const data = await response.json();
+        alert(data.message);
+      }
+
+      async function checkAndPlay() {
+        const response = await fetch("/stream/status/" + sessionId);
+        const data = await response.json();
+
+        if (data.status === "ready") {
+          document.getElementById("audioPlayer").src = "/stream/" + sessionId;
+        } else {
+          alert("Audio still processing, try again in a few seconds!");
+        }
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,48 @@
+# Python bytecode files
+*.pyc
+*.pyo
+__pycache__/
+
+# Virtual environment
+venv/
+
+# IDEs/editors
+.vscode/
+.idea/
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# Log files
+*.log
+
+# Temporary files
+*.swp
+*.bak
+*.tmp
+
+# Build and distribution files
+build/
+dist/
+*.egg-info/
+
+# Environment variables
+.env
+.env.*
+
+# Database files
+*.sqlite3
+*.db
+
+# Generated audio and text files
+*.mp3
+*.wav
+*.txt
+generated_audio/
+
+# Test reports
+*.coverage
+*.coveragerc
+nosetests.xml
+test-*.xml
