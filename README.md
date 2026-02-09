@@ -206,7 +206,7 @@ pytest
 
 ## Contributing
 
-(Add guidelines for contributing if this were an open-source project)
+(Add guidelines for contributing )
 
 ## License
 
