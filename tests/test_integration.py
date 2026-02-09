@@ -1,14 +1,13 @@
-# tests/test_integration.py
 import pytest
-from httpx import AsyncClient
+from httpx import AsyncClient, ASGITransport
 from app.main import app
 
 @pytest.mark.asyncio
 async def test_full_flow():
-    async with AsyncClient(app=app, base_url="http://test") as ac:
+    async with AsyncClient(transport=ASGITransport(app=app), base_url="http://test") as ac:
         # 1. Upload
-        files = {'file': ('test_audio.wav', b'test data', 'audio/wav')}
-        upload_response = await ac.post("/upload/text", files=files)
+        form_data = {"text": "This is some test text for integration."}
+        upload_response = await ac.post("/upload/text", data=form_data)
         assert upload_response.status_code == 200
         session_id = upload_response.json()["session_id"]
 

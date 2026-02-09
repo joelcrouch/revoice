@@ -57,16 +57,15 @@ In your favorite ide or vim or emacs or notepad, make the project structure as s
 
 These will be the API calls we will be working around:
 
-# TODO: FIX THIS TABLE
 
-Route | Method | Purpose
-/upload/text | POST | Upload pasted text or text file
-/upload/audio | POST | Upload audiobook audio file
-/voices | GET | List available voices
-/generate | POST | Generate TTS audio from text with selected voice
-/stream/{session_id} | GET | Stream generated audio chunks
-
-Example API workflow:
+```
+Route               | Method    | Purpose
+/upload/text        | POST      | Upload pasted text or text file
+/upload/audio       | POST      |  Upload audiobook audio file
+/voices             | GET       | List available voices
+/generate           | POST      | Generate TTS audio from text with selected voice
+/stream/{session_id} | GET      | Stream generated audio chunks
+```
 
 Example API Flow:
 
@@ -119,7 +118,6 @@ Lets start with upload.py
 
 ```
 python
-# app/routes/upload.py
 
 from fastapi import APIRouter, UploadFile, File, Form
 from app.models.request_models import TextUploadRequest
@@ -149,7 +147,6 @@ and then request_modesl.py in models directory.
 
 ```
 python
-# app/models/request_models.py
 
 from pydantic import BaseModel
 
@@ -161,7 +158,6 @@ class TextUploadRequest(BaseModel):
 and finally a little utility file.
 
 ```python
-# app/utils/file_utils.py
 
 import os
 
@@ -199,18 +195,20 @@ Ok. But wait. How does this work?
 
 - Later, when the user chooses a voice, you grab that text file and run it through the TTS generator.
 
-🧠 Recap of what we now have:
+## Recap of what we now have:
 
 ✅ Server running with FastAPI
+
 ✅ /upload/text API ready
+
 ✅ Text saving logic ready
+
 ✅ Session management started
 
 OK. Now lets create the voices endpoint.
 Create a new file: app/routes/tts.py
 
 ```python
-# app/routes/tts.py
 
 from fastapi import APIRouter
 from app.services.tts_service import get_available_voices
@@ -229,7 +227,6 @@ async def list_voices():
 Make a basic TTS service: app/services/tts_service.py
 
 ```python
-# app/services/tts_service.py
 
 import pyttsx3
 
@@ -286,7 +283,6 @@ Let's do both: first /generate API (create the new voice audio), then /stream AP
 So lets add a new route to tts.py:
 
 ```python
-# app/routes/tts.py (continued)
 
 from fastapi import BackgroundTasks
 from app.models.request_models import GenerateRequest
@@ -314,7 +310,6 @@ async def generate_audio(generate_request: GenerateRequest, background_tasks: Ba
 and update the request_models.py:
 
 ```python
-# app/models/request_models.py (continued)
 
 class GenerateRequest(BaseModel):
     session_id: str
@@ -325,7 +320,6 @@ class GenerateRequest(BaseModel):
 And also update file_utils to load text:
 
 ```python
-# app/utils/file_utils.py (continued)
 
 def load_temp_text(session_id: str) -> str:
     """
@@ -347,7 +341,6 @@ Now, when you hit /generate:
 Now lets get on that stream api:
 
 ```python
-# app/routes/stream.py
 
 from fastapi import APIRouter, HTTPException
 from fastapi.responses import FileResponse
@@ -386,7 +379,6 @@ Goal: Check if the generated audio file exists = "ready".
 Update app/routes/stream.py (same file, add another route):
 
 ```python
-# app/routes/stream.py (continued)
 
 @router.get("/status/{session_id}")
 async def check_status(session_id: str):
@@ -404,7 +396,6 @@ async def check_status(session_id: str):
 
 Now you have:
 
-# TODO FIX THIS TABLE
 
 API Description Status
 /status/{id} Check if audio is ready ✅
@@ -617,7 +608,7 @@ Create a test folder.
 
     - [] Break up .html file.  Add some styling to it.
     - [] Break up testsuite so it makes more sense
-    -
+    
 
 ### TODO
 
