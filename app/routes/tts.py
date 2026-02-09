@@ -1,5 +1,3 @@
-# app/routes/tts.py
-
 from fastapi import APIRouter
 from app.services.tts_service import get_available_voices
 
@@ -13,8 +11,6 @@ async def list_voices():
     voices = get_available_voices()
     return {"voices": voices}
 
-
-# app/routes/tts.py (continued)
 
 from fastapi import BackgroundTasks
 from app.models.request_models import GenerateRequest
@@ -31,7 +27,6 @@ async def generate_audio(generate_request: GenerateRequest, background_tasks: Ba
     
     # Load the text that was uploaded
     text = load_temp_text(session_id)
-    
     # Background task to generate audio
     background_tasks.add_task(synthesize_text, session_id, text, voice_id)
     

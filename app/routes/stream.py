@@ -1,5 +1,3 @@
-# app/routes/stream.py
-
 from fastapi import APIRouter, HTTPException
 from fastapi.responses import FileResponse
 import os
@@ -18,8 +16,6 @@ async def stream_audio(session_id: str):
     
     return FileResponse(filepath, media_type="audio/mpeg", filename=f"{session_id}.mp3")
 
-
-# app/routes/stream.py (continued)
 
 @router.get("/status/{session_id}")
 async def check_status(session_id: str):

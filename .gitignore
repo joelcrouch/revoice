@@ -46,3 +46,6 @@ generated_audio/
 *.coveragerc
 nosetests.xml
 test-*.xml
+
+
+temp/

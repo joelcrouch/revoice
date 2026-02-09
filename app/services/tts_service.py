@@ -1,5 +1,3 @@
-# app/services/tts_service.py
-
 import pyttsx3
 
 def get_available_voices():
@@ -15,7 +13,7 @@ def get_available_voices():
             "id": voice.id,
             "name": voice.name,
             "gender": voice.gender if hasattr(voice, "gender") else "Unknown",
-            "language": voice.languages[0].decode('utf-8') if voice.languages else "Unknown"
+            "language": voice.languages[0] if voice.languages else "Unknown"
         })
     
     engine.stop()

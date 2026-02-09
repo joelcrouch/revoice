@@ -1,5 +1,3 @@
-# app/routes/upload.py
-
 from fastapi import APIRouter, UploadFile, File, Form
 from app.models.request_models import TextUploadRequest
 from app.utils.file_utils import save_temp_text_file
